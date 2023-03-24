@@ -1,4 +1,4 @@
-INSERT INTO department (id, division)
+INSERT INTO department (id, name)
 VALUES (1, 'Sales'),
        (2, 'Engineering'),
        (3, 'Finance'),
@@ -15,4 +15,11 @@ VALUES (1, 'Sales Lead', 1, 100000),
        (8, 'Lawyer', 4, 250000);
 
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
-VALUES ()  
+VALUES (1, 'Luke', 'Skywalker', 1, NULL),
+       (2, 'Han', 'Solo', 1, 1),
+       (3, 'Ben', 'Kenobi', 2, NULL),
+       (4, 'Darth', 'Vader', 2, 2),
+       (5, 'Leia', 'Organa', 3, NULL),
+       (6, 'Poe', 'Dameron', 3, 3),
+       (7, 'Padme', 'Amidala', 4, NULL),
+       (8, 'Lando', 'Calrissian', 4, 4);

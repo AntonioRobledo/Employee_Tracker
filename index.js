@@ -1,11 +1,34 @@
 const inquirer = require('inquirer');
-const mysql2 = require('mysql2');
+const mysql = require('mysql2');
 const cTable = require('console.table');
 
 // creates connection to database
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
     host:'localhost',
     user: 'root',
+    password: 'tDxeVkqky12@@',
     database: 'employee_db'
-});
+    },
+    console.log(`Connected to the employee_db database.`)
+);
 
+// inquirer prompts user with choices
+inquirer.prompt([
+    {
+        type: 'list',
+        message: 'What would you like to do?',
+        name: 'init',
+        choices: [
+            'View All Employees',
+            'Add Employee',
+            'Update Employee Role',
+            'View All Roles',
+            'Add Role',
+            'View All Departments', 
+            'Add Department' 
+        ]
+    }
+]).then(response => {
+    console.log(response)
+    switch(response.)
+})
