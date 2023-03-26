@@ -30,5 +30,38 @@ inquirer.prompt([
     }
 ]).then(response => {
     console.log(response)
-    switch(response.)
+    switch(response.init) {
+        case 'View All Employess':
+            viewAllEmployees();
+            break;
+        case 'Add Employee':
+            addEmployee();
+            break;
+        case 'Update Employee Role':
+            updateEmployeeRole();
+            break;
+        case 'View All Roles':
+            viewAllRoles();
+            break;
+        case 'Add Role':
+            addRole();
+            break;
+        case 'View All Departments':
+            viewAllDepartments();
+            break;
+        case 'Add Department':
+            addDepartment();
+            break;
+    }
 })
+
+const viewAllEmployees = () => {
+    inquirer.prompt ([
+        {
+            type: 'list',
+            name: 'viewEmployees',
+            message: 
+            
+        }
+    ])
+}
