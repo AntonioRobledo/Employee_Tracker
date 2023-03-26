@@ -60,7 +60,7 @@ const viewAllEmployees = () => {
         {
             type: 'list',
             name: 'viewEmployees',
-            message: 
+            message: 'message'
             
         }
     ])
