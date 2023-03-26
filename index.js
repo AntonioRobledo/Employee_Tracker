@@ -13,6 +13,7 @@ const db = mysql.createConnection({
 );
 
 // inquirer prompts user with choices
+const init = () => {
 inquirer.prompt([
     {
         type: 'list',
@@ -25,13 +26,14 @@ inquirer.prompt([
             'View All Roles',
             'Add Role',
             'View All Departments', 
-            'Add Department' 
+            'Add Department',
+            'Exit'
         ]
     }
 ]).then(response => {
     console.log(response)
     switch(response.init) {
-        case 'View All Employess':
+        case 'View All Employees':
             viewAllEmployees();
             break;
         case 'Add Employee':
@@ -52,16 +54,42 @@ inquirer.prompt([
         case 'Add Department':
             addDepartment();
             break;
-    }
-})
-
-const viewAllEmployees = () => {
-    inquirer.prompt ([
-        {
-            type: 'list',
-            name: 'viewEmployees',
-            message: 'message'
-            
-        }
-    ])
+        case 'Exit':
+            break;
+         }
+    })
 }
+
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'department',
+            message: 'Enter the name of the department you would like to create: '
+        }
+    ]).then(response => {
+        console.log(response)
+        db.query('INSERT INTO department SET ?', response, (err) => {
+            err ? console.log(err) : console.log('A new department has been added.')
+            init(); 
+        })
+    })
+}
+
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role',
+            message: 'Enter the name of the role you would like to create: '
+        }
+    ]).then(response {
+        console.log(response)
+        db.query('INSERT INTO role SET ?', response, (err) => {
+            err ? console.log(err) : console.log(' A new role has been added.')
+            init();
+        })
+    })
+}
+
+init();
