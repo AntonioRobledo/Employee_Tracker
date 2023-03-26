@@ -13,6 +13,7 @@ const db = mysql.createConnection({
 );
 
 // inquirer prompts user with choices
+const init = () => {
 inquirer.prompt([
     {
         type: 'list',
@@ -30,5 +31,14 @@ inquirer.prompt([
     }
 ]).then(response => {
     console.log(response)
-    switch(response.)
-})
+    switch(response.init) {
+        case 'View All Employees':
+            viewAllEmployees();
+            break;
+        case 'Add Employee':
+            addEmployee();
+            break;
+        case ' '
+    }
+ })
+}
