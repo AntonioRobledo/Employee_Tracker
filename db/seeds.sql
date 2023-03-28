@@ -5,7 +5,7 @@ VALUES (1, 'Sales'),
        (4, 'Legal');
 
 INSERT INTO role (id, title, department_id, salary)
-VALUES (1, 'Sales Lead', 1, 100000),
+VALUES (1, 'Sales Lead', 1, 100000), 
        (2, 'Sales Associate', 1, 80000),
        (3, 'Lead Engineer', 2, 150000),
        (4, 'Software Engineer', 2, 120000),
@@ -16,10 +16,10 @@ VALUES (1, 'Sales Lead', 1, 100000),
 
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
 VALUES (1, 'Luke', 'Skywalker', 1, NULL),
-       (2, 'Han', 'Solo', 1, 1),
-       (3, 'Ben', 'Kenobi', 2, NULL),
-       (4, 'Darth', 'Vader', 2, 2),
-       (5, 'Leia', 'Organa', 3, NULL),
-       (6, 'Poe', 'Dameron', 3, 3),
-       (7, 'Padme', 'Amidala', 4, NULL),
-       (8, 'Lando', 'Calrissian', 4, 4);
+       (2, 'Han', 'Solo', 2, 1),
+       (3, 'Ben', 'Kenobi', 3, NULL),
+       (4, 'Darth', 'Vader', 4, 2),
+       (5, 'Leia', 'Organa', 5, NULL),
+       (6, 'Poe', 'Dameron', 6, 3),
+       (7, 'Padme', 'Amidala', 7, NULL),
+       (8, 'Lando', 'Calrissian', 8, 4);
