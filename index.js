@@ -1,8 +1,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const cTable = require('console.table');
+require('console.table');
 
-// creates connection to database
 const db = mysql.createConnection({
     host:'localhost',
     user: 'root',
@@ -12,7 +11,6 @@ const db = mysql.createConnection({
     console.log(`Connected to the employee_db database.`)
 );
 
-// inquirer prompts user with choices
 const init = () => {
 inquirer.prompt([
     {
@@ -77,6 +75,16 @@ const addDepartment = () => {
 }
 
 const addRole = () => {
+    db.query("SELECT id, name FROM department", (err, response) => {
+        if(err) { console.log(err);
+        }
+        const roleList = response.map((response) => {
+            return {
+                value: response.id,
+                name: response.name
+            };
+        });
+
     inquirer.prompt([
         {
             type: 'input',
@@ -89,9 +97,10 @@ const addRole = () => {
             message: 'Enter the salary of this role: '
         },
         {
-            type: 'input',
+            type: 'list',
             name: 'department_id',
-            message: 'Enter the department number this role should be under: '
+            message: 'Which department does this role belong to?: ',
+            choices: roleList
         },
     ]).then(response => {
         db.query('INSERT INTO role SET ?', response, (err) => {
@@ -99,6 +108,7 @@ const addRole = () => {
             init();
         })
     })
+})
 }
 
 const addEmployee = () => {
@@ -119,38 +129,16 @@ const addEmployee = () => {
             message: "Enter the employee's role ID: "
         },
         {
-            type: 'list',
-            name: 'isManager',
-            message: "Is the employee a manager?",
-            choices: ['yes', 'no']
+            type: 'input',
+            name: 'manager_id',
+            message: "Enter employee's manager's ID: "
         }
     ]).then(response => {
-        if(response.isManager === 'yes') {
-            delete response.isManager
-            db.query('INSERT INTO employee SET ?', response, err => {
-            err ? console.log(err) : console.log('A new manager has been added.')
-            })
-            init();
-        } else if (response.isManager === 'no') {
-            inquirer.prompt([
-                {
-                    type: 'input',
-                    name: 'manager_id',
-                    message: "Enter the employee's manager's ID: "
-                }
-            ]).then(result => {
-                delete response.isManager
-                let newEmployee = {
-                ...response,
-                ...result
-                }
-                db.query('INSERT INTO employee SET ?', newEmployee, err => {
-                    if(err) {console.log(err)}
-                })
-            })
-            console.log('A new employee has been added.')
-            init();
-        }
+        db.query('INSERT INTO employee SET ?', response, (err) => {
+        err ? console.log(err) : console.log('A new employee has been added.')
+
+        init();
+        })
     })
 }
 
@@ -176,26 +164,63 @@ const viewAllEmployees = () => {
 }
 
 const updateEmployeeRole = () => {
+    db.query("SELECT employee.id, CONCAT(employee.first_name,' ', employee.last_name) AS name, role.title FROM employee JOIN role ON employee.id = role.id",
+     (err, response) => {
+        if(err) { console.log(err);
+        }
+        const employeeList = response.map((response) => ({
+                name: response.name,
+                value: response.id
+        }));
+        db.query("SELECT title, id FROM role", 
+        (err, response) => {
+            if (err) {console.log(err);
+            }
+            const newRole = response.map((response) => ({
+                    name: response.title,
+                    value: response.id
+            }));
+            db.query("SELECT first_name, id FROM employee",
+            (err, response) => {
+            if (err) {console.log(err);
+            }
+            const managerList = response.map((response) => ({
+                    name: response.first_name,
+                    value: response.id
+            }));
+        
     inquirer.prompt([
         {
-            type: 'input',
+            type: 'list',
             name: 'id',
-            message: 'Enter the ID of the employee you would like to update: '
+            message: "Which employee's role would you like to update?",
+            choices: employeeList
         },
         {
-            type: 'input',
+            type: 'list',
             name: 'role_id',
-            message: 'What is the role of the employee you would like to update to?'
+            message: 'What role would you like to assign them?',
+            choices: newRole
+        },
+        {
+            type: 'list',
+            name: 'manager_id',
+            message: "Who is the employee's manager?",
+            choices: managerList
         }
-    ]).then(response => {
-        let updatedRole = {
-            role_id: response.role_id
-        }
-        db.query(`UPDATE employee SET ? WHERE id = ${response.id}`, updatedRole, err => {
+    ]).then((response => {
+        db.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [response.role_id, response.id], err => {
+            if(err) {console.log(err)}
+        })
+        db.query(`UPDATE employee SET manager_id = ? WHERE id = ?`, [response.manager_id, response.id], err => {
             if(err) {console.log(err)}
         })
         console.log("Employee's info has been updated. Please check console table for changes.")
         init();
+                    }
+                ))       
+            })
+        })
     })
 }
 
